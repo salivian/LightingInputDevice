@@ -18,6 +18,7 @@ void loop() {
   int sensorValue0 = analogRead(A0);
   int sensorValue1 = analogRead(A1);
   int sensorValue2 = analogRead(A2);
+  int sensorValue3 = analogRead(A3);
   // print out the value you read:
   Serial.print(sensorValue0);
   Serial.print(" ");
@@ -26,6 +27,9 @@ void loop() {
   Serial.print(" ");
 
   Serial.print(sensorValue2);
+  Serial.print(" ");
+
+  Serial.print(sensorValue3);
   Serial.println("");
   delay(1);        // delay in between reads for stability
 }
