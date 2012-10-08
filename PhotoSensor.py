@@ -14,22 +14,30 @@ class PhotoSensor:
 
         readings=np.array([
                 [0,1.,0,0], #0
+                [0,1.,0.5,0],
                 [0,1.,1.,0], #45
+                [0,0.5,1.,0],
                 [0,0,1.,0], #90
+                [0.5,0,1,0],
                 [1.,0,1.,0], #135
+                [1.,0,0.5,0],
                 [1.,0,0,0], #180
+                [1.,0,0,0.5],
                 [1.,0,0,1.], #225
+                [0.5,0,0,1.],
                 [0,0,0,1.], #270
-                [0,1.,0,1.] #315                
+                [0,0.5,0,1.],
+                [0,1.,0,1.], #315                
+                [0,1.,0,0.5]
                 ])
         for i,r in enumerate(readings):
             readings[i,:] = r/np.linalg.norm(r)
 
-        values=np.array([0,45,90,135,180,225,270,315])
+        values=np.array([0,22.5,45,77.5,90,112.5,135,157.5,
+                         180,202.5,225,247.5,270,292.5,315,337.5])
         
-        print readings
+        #print readings
         self.li =  NearestNDInterpolator(readings,values)
-        #self.li =  LinearNDInterpolator(readings,values)
         
     def calibrate_ambient(self):
         raw_input("Press enter to get an ambient reading")
@@ -76,9 +84,6 @@ class PhotoSensor:
     def getSensorReading(self):
         reading = None
         while(reading is None):
-            #while self.ser.inWaiting() > 0 :
-            #    self.ser.read(self.ser.inWaiting());
-
             lines = self.ser.read(128).split('\n');
         
             if (len(lines) > 3):
@@ -90,10 +95,10 @@ class PhotoSensor:
     def getAngle(self,reading):
         r = reading - self.ambient
         if(np.linalg.norm(r) < 50):
-            return -1
+            return np.nan
         r = r / np.linalg.norm(r)
-        print r
-        return self.li(r.reshape([1,4]))
+        #print r
+        return -self.li(r.reshape([1,4]))
 
 def main():
     sensor = PhotoSensor()

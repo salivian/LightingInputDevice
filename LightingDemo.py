@@ -1,4 +1,11 @@
 #! /usr/bin/env python
+'''
+This program is a modified PyOpenGL example.
+
+The animation routine polls the arduino photo sensor is added to control 
+the lighting.
+'''
+
 '''=Specular Highlights, Indexed Geometry, Directional Lighting=
 
 [shader_6.py-screen-0001.png Screenshot]
@@ -239,6 +246,7 @@ class TestContext( BaseContext ):
                 print 'Warning, no attribute: %s'%( uniform )
             setattr( self, attribute+ '_loc', location )
 
+        #Add a timer
         self.time = Timer( duration = 8.0, repeating = 1 )
         self.time.addEventHandler( "fraction", self.OnTimerFraction )
         self.time.register (self)
@@ -249,12 +257,9 @@ class TestContext( BaseContext ):
 
 
     def OnTimerFraction( self, event ):
-        #self.rotation = event.fraction()* -2*math.pi
-        #print self.rotation /math.pi * 180
         r = self.sensor.getSensorReading()
         angle = self.sensor.getAngle(r)
-        if(angle != -1):
-            self.rotation = angle/180.0 *  pi
+        self.rotation = angle/180.0 *  pi
         
 
     def getLightLocation(self):
